@@ -8,9 +8,10 @@ namespace HeatWave.Controllers
     [ApiController]
     public class TempController : ControllerBase
     {
-        private TempRepoDB _tempRepository;
+        private TempRepo _tempRepository;
+        private TempRepoDB _tempRepo;
 
-        public TempController(TempRepoDB tempRepository)
+        public TempController(TempRepo tempRepository)
         {
             _tempRepository = tempRepository;
         }
@@ -20,7 +21,7 @@ namespace HeatWave.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<IEnumerable<TemperatureMeasurement>> Get([FromQuery] DateTime? date=null, [FromQuery] string? orderBy=null ) 
+        public ActionResult<IEnumerable<TemperatureMeasurement>> Get([FromQuery] DateTime? date = null, [FromQuery] string? orderBy = null)
         {
             try
             {
@@ -38,7 +39,7 @@ namespace HeatWave.Controllers
             catch (Exception ex)
             {
                 //Hvis der opstår en fejl, returner "Internal Server Error" statuskode med fejlbesked
-                return StatusCode(StatusCodes.Status500InternalServerError,"An error occured while processing your request"+ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occured while processing your request" + ex.Message);
             }
 
         }
@@ -125,10 +126,10 @@ namespace HeatWave.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public ActionResult<TemperatureMeasurement?> Delete(int id) 
+        public ActionResult<TemperatureMeasurement?> Delete(int id)
         {
             //Slet måling ved givet id fra repository
-            TemperatureMeasurement? measurement = _tempRepository.Delete(id);
+            TemperatureMeasurement? measurement = _tempRepository.Remove(id);
             if (measurement == null)
             {
                 //Hvis målingen ikke findes, returneres en 404
